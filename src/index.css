@@ -1,16 +1,45 @@
-:root {
-  color-scheme: light dark;
-  font-family: system-ui, sans-serif;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: #0a0a0c;
+    color: #f3f0e7;
+    font-family: Manrope, system-ui, sans-serif;
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  ::selection {
+    background: rgba(230, 200, 136, 0.28);
+    color: #f3f0e7;
+  }
+
+  :focus-visible {
+    outline: 1.5px solid #e6c888;
+    outline-offset: 3px;
+  }
+
+  /* Only the r3f canvas needs default touch handling suppressed for drag */
+  canvas {
+    touch-action: none;
+  }
 }
 
-body {
-  margin: 0;
-  padding: 2rem;
-}
-
-.box {
-  padding: 1rem;
-  margin-block: 0.5rem;
-  border: 1px solid currentColor;
-  border-radius: 0.5rem;
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 }
