@@ -1,72 +1,42 @@
-export type ElementId =
-  | "fire"
-  | "water"
-  | "earth"
-  | "air"
-  | "vapour"
-  | "moltenMetal"
-  | "clay"
-  | "spark"
-  | "mist"
-  | "dust"
-  | "salt"
-  | "mercury"
-  | "sulphur"
-  | "livingMetal"
-  | "aether"
-  | "brine"
-  | "purifiedSalt"
-  | "essence"
-  | "lead"
-  | "philosophersStone"
-  | "gold";
+export type ElementCategory =
+  | "alkali-metal"
+  | "alkaline-earth"
+  | "transition-metal"
+  | "post-transition-metal"
+  | "metalloid"
+  | "nonmetal"
+  | "halogen"
+  | "noble-gas"
+  | "lanthanide"
+  | "actinide";
 
-export type Tier = 0 | 1 | 2 | 3;
+export interface QuizQuestion {
+  question: string;
+  options: [string, string, string, string];
+  correctIndex: 0 | 1 | 2 | 3;
+  hint: string;
+}
 
-/** Which family of hand-drawn glyph a rune icon renders. */
-export type Glyph =
-  | "fire"
-  | "water"
-  | "earth"
-  | "air"
-  | "salt"
-  | "mercury"
-  | "sulphur"
-  | "lead"
-  | "stone"
-  | "gold"
-  | "ring";
+export interface ElementFacts {
+  discoveredYear?: number;
+  /** "Ancient" for elements known since antiquity (no single discoverer). */
+  discoveredBy?: string;
+  usedIn: string;
+  funFact: string;
+}
 
 export interface ElementDef {
-  id: ElementId;
+  number: number;
+  symbol: string;
   name: string;
-  /** Tier at which this element becomes available on the shelf. */
-  tier: Tier;
-  /** Raw materials appear on the shelf directly; others must be discovered by combination. */
-  isRaw: boolean;
-  color: string;
-  glyph: Glyph;
-  /** Deterministic seed for auto-generated ring glyphs (unused by hand-authored glyphs). */
-  glyphSeed?: number;
-  lore: string;
-}
-
-export interface PairRecipe {
-  kind: "pair";
-  inputs: readonly [ElementId, ElementId];
-  result: ElementId;
-}
-
-export interface TripleRecipe {
-  kind: "triple";
-  inputs: readonly [ElementId, ElementId, ElementId];
-  result: ElementId;
-}
-
-export type Recipe = PairRecipe | TripleRecipe;
-
-export interface VesselSlot {
-  elementId: ElementId;
-  /** Unique key so the same element dropped twice still animates distinctly. */
-  key: string;
+  category: ElementCategory;
+  /** Display position on the table grid: period 1-7, plus 8 (lanthanide row) and 9 (actinide row). */
+  row: number;
+  /** Display column 1-18. */
+  col: number;
+  /** Electron count per shell, e.g. Na = [2, 8, 1]. */
+  shells: number[];
+  facts: ElementFacts;
+  /** Present only for the ~20 hand-authored "featured" elements. */
+  quiz?: QuizQuestion;
 }

@@ -32,7 +32,7 @@
     outline-offset: 3px;
   }
 
-  /* Only the r3f canvas needs default touch handling suppressed for drag */
+  /* The atom canvas reacts to pointer position; it doesn't need default touch scrolling/zoom gestures. */
   canvas {
     touch-action: none;
   }

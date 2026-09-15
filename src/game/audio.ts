@@ -1,45 +1,51 @@
 import { Howl, Howler } from "howler";
-import { synthBubble, synthChime, synthFzzt, synthGoldSwell, synthHum } from "./synthWav";
+import { synthChime, synthCorrect, synthFzzt, synthGoldSwell, synthHoverTick, synthHum } from "./synthWav";
 
 let hum: Howl | null = null;
-let bubble: Howl | null = null;
-let chime: Howl | null = null;
-let fzzt: Howl | null = null;
-let goldSwell: Howl | null = null;
+let openChime: Howl | null = null;
+let correctDing: Howl | null = null;
+let wrongBuzz: Howl | null = null;
+let badgeSwell: Howl | null = null;
+let hoverTick: Howl | null = null;
 
 function ensureLoaded() {
   if (hum) return;
-  hum = new Howl({ src: [synthHum()], format: ["wav"], loop: true, volume: 0.5 });
-  bubble = new Howl({ src: [synthBubble()], format: ["wav"], loop: true, volume: 0.6 });
-  chime = new Howl({ src: [synthChime()], format: ["wav"], volume: 0.8 });
-  fzzt = new Howl({ src: [synthFzzt()], format: ["wav"], volume: 0.7 });
-  goldSwell = new Howl({ src: [synthGoldSwell()], format: ["wav"], volume: 0.9 });
+  hum = new Howl({ src: [synthHum()], format: ["wav"], loop: true, volume: 0.35 });
+  openChime = new Howl({ src: [synthChime()], format: ["wav"], volume: 0.55 });
+  correctDing = new Howl({ src: [synthCorrect()], format: ["wav"], volume: 0.8 });
+  wrongBuzz = new Howl({ src: [synthFzzt()], format: ["wav"], volume: 0.55 });
+  badgeSwell = new Howl({ src: [synthGoldSwell()], format: ["wav"], volume: 0.85 });
+  hoverTick = new Howl({ src: [synthHoverTick()], format: ["wav"], volume: 0.3 });
 }
 
 export function startAmbient() {
   ensureLoaded();
   if (hum && !hum.playing()) hum.play();
-  if (bubble && !bubble.playing()) bubble.play();
 }
 
-export function duckAmbient() {
-  if (hum?.playing()) hum.fade(hum.volume(), 0.08, 1200);
-  if (bubble?.playing()) bubble.fade(bubble.volume(), 0.05, 1200);
-}
-
-export function playChime() {
+export function playOpen() {
   ensureLoaded();
-  chime?.play();
+  openChime?.play();
 }
 
-export function playFail() {
+export function playCorrect() {
   ensureLoaded();
-  fzzt?.play();
+  correctDing?.play();
 }
 
-export function playGoldSwell() {
+export function playWrong() {
   ensureLoaded();
-  goldSwell?.play();
+  wrongBuzz?.play();
+}
+
+export function playBadge() {
+  ensureLoaded();
+  badgeSwell?.play();
+}
+
+export function playHover() {
+  ensureLoaded();
+  hoverTick?.play();
 }
 
 export function setMuted(muted: boolean) {
