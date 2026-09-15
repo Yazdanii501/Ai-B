@@ -75,29 +75,41 @@ export function synthHum(): string {
   return encodeWav(samples);
 }
 
-/** Soft, sporadic bubbling blips. */
-export function synthBubble(): string {
-  const duration = 5;
+/** Tiny, soft UI tick for hover/focus — barely-there feedback. */
+export function synthHoverTick(): string {
+  const duration = 0.07;
   const samples = makeBuffer(duration);
-  let seed = 42;
-  const rand = () => {
-    seed = (seed * 1103515245 + 12345) & 0x7fffffff;
-    return seed / 0x7fffffff;
-  };
+  const freq = 1400;
+  for (let i = 0; i < samples.length; i++) {
+    const t = i / SAMPLE_RATE;
+    const env = Math.exp(-t * 55);
+    samples[i] = Math.sin(2 * Math.PI * freq * t) * env * 0.5;
+  }
+  for (let i = 0; i < samples.length; i++) samples[i] *= 0.35;
+  return encodeWav(samples);
+}
 
-  const blipCount = 9;
-  for (let b = 0; b < blipCount; b++) {
-    const start = Math.floor(rand() * (samples.length - SAMPLE_RATE * 0.3));
-    const len = Math.floor(SAMPLE_RATE * (0.06 + rand() * 0.05));
-    const freq = 300 + rand() * 500;
-    for (let i = 0; i < len; i++) {
-      const t = i / SAMPLE_RATE;
-      const env = Math.exp(-t * 40);
-      samples[start + i] += Math.sin(2 * Math.PI * freq * (1 + t * 4) * t) * env * 0.5;
+/** Two-note rising "correct answer" ding — brighter and bigger than the open chime. */
+export function synthCorrect(): string {
+  const duration = 0.9;
+  const samples = makeBuffer(duration);
+  const notes = [
+    { freq: 587.33, start: 0, gain: 0.55 },
+    { freq: 880, start: 0.09, gain: 0.55 },
+  ];
+  for (const note of notes) {
+    const startSample = Math.floor(note.start * SAMPLE_RATE);
+    for (let i = startSample; i < samples.length; i++) {
+      const t = (i - startSample) / SAMPLE_RATE;
+      const env = Math.exp(-t * 4.5);
+      samples[i] +=
+        (Math.sin(2 * Math.PI * note.freq * t) + Math.sin(2 * Math.PI * note.freq * 2 * t) * 0.3) *
+        env *
+        note.gain;
     }
   }
-  fadeEdges(samples, 400);
-  for (let i = 0; i < samples.length; i++) samples[i] *= 0.3;
+  fadeEdges(samples, 40);
+  for (let i = 0; i < samples.length; i++) samples[i] *= 0.5;
   return encodeWav(samples);
 }
 

@@ -1,22 +1,13 @@
-import { useGameStore } from "../../game/store";
+import { useGameStore } from "../game/store";
 
 export function MuteToggle() {
-  const phase = useGameStore((s) => s.phase);
   const muted = useGameStore((s) => s.muted);
   const toggleMute = useGameStore((s) => s.toggleMute);
-  const markAudioInteracted = useGameStore((s) => s.markAudioInteracted);
-
-  if (phase === "intro") return null;
-
-  function handleClick() {
-    markAudioInteracted();
-    toggleMute();
-  }
 
   return (
     <button
       type="button"
-      onClick={handleClick}
+      onClick={toggleMute}
       aria-pressed={!muted}
       aria-label={muted ? "Unmute sound" : "Mute sound"}
       className="pointer-events-auto fixed bottom-6 right-5 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-gold/25 bg-white/[0.045] text-ink backdrop-blur-md transition-colors hover:border-gold/50 sm:right-8"

@@ -2,12 +2,9 @@
 export interface PerfProfile {
   isMobile: boolean;
   dpr: [number, number];
-  transmissionSamples: number;
   bloomEnabled: boolean;
-  dofEnabled: boolean;
-  particleCount: number;
-  /** Skip render-to-texture materials (transmission, reflections) entirely. */
-  cheapMaterials: boolean;
+  /** Particle count for the canvas-2D dust ambience behind the table. */
+  dustCount: number;
 }
 
 export function detectPerfProfile(): PerfProfile {
@@ -18,36 +15,12 @@ export function detectPerfProfile(): PerfProfile {
 
   /** Debug override for constrained/software-rendering environments (?lowfi=1). */
   if (typeof window !== "undefined" && new URLSearchParams(window.location.search).has("lowfi")) {
-    return {
-      isMobile,
-      dpr: [1, 1],
-      transmissionSamples: 1,
-      bloomEnabled: false,
-      dofEnabled: false,
-      particleCount: 40,
-      cheapMaterials: true,
-    };
+    return { isMobile, dpr: [1, 1], bloomEnabled: false, dustCount: 20 };
   }
 
   if (isMobile) {
-    return {
-      isMobile: true,
-      dpr: [1, 1.5],
-      transmissionSamples: 2,
-      bloomEnabled: true,
-      dofEnabled: false,
-      particleCount: 220,
-      cheapMaterials: false,
-    };
+    return { isMobile: true, dpr: [1, 1.5], bloomEnabled: true, dustCount: 40 };
   }
 
-  return {
-    isMobile: false,
-    dpr: [1, 2],
-    transmissionSamples: 6,
-    bloomEnabled: true,
-    dofEnabled: true,
-    particleCount: 600,
-    cheapMaterials: false,
-  };
+  return { isMobile: false, dpr: [1, 2], bloomEnabled: true, dustCount: 90 };
 }

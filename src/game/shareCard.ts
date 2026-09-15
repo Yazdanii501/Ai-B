@@ -1,14 +1,8 @@
 export interface ShareStats {
-  discoveries: number;
-  discoveryTotal: number;
-  transmutations: number;
-  elapsedSeconds: number;
-}
-
-function formatElapsed(totalSeconds: number): string {
-  const m = Math.floor(totalSeconds / 60);
-  const s = Math.floor(totalSeconds % 60);
-  return `${m}:${s.toString().padStart(2, "0")}`;
+  discovered: number;
+  total: number;
+  badgeCount: number;
+  badgeTotal: number;
 }
 
 export async function renderShareCard(stats: ShareStats): Promise<Blob> {
@@ -25,14 +19,7 @@ export async function renderShareCard(stats: ShareStats): Promise<Blob> {
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, width, height);
 
-  const glow = ctx.createRadialGradient(
-    width / 2,
-    height / 2 - 40,
-    40,
-    width / 2,
-    height / 2 - 40,
-    460
-  );
+  const glow = ctx.createRadialGradient(width / 2, height / 2 - 30, 40, width / 2, height / 2 - 30, 460);
   glow.addColorStop(0, "rgba(230,200,136,0.16)");
   glow.addColorStop(1, "rgba(230,200,136,0)");
   ctx.fillStyle = glow;
@@ -45,39 +32,40 @@ export async function renderShareCard(stats: ShareStats): Promise<Blob> {
   ctx.textAlign = "center";
   ctx.fillStyle = "#8A8A94";
   ctx.font = "500 20px Georgia, serif";
-  ctx.fillText("A cinematic laboratory", width / 2, 190);
+  ctx.fillText("A living periodic table", width / 2, 190);
 
   ctx.fillStyle = "#F3F0E7";
   ctx.font = "500 84px Georgia, serif";
-  ctx.fillText("The Alchemist", width / 2, 280);
+  ctx.fillText("Elementa", width / 2, 280);
 
   ctx.fillStyle = "#E6C888";
-  ctx.font = "italic 500 30px Georgia, serif";
-  ctx.fillText("You turned lead into gold.", width / 2, 340);
+  ctx.font = "italic 500 28px Georgia, serif";
+  ctx.fillText(
+    stats.discovered >= stats.total ? "Every element, discovered." : "The collection is growing.",
+    width / 2,
+    336
+  );
 
-  const stats3 = [
-    [`${stats.discoveries} / ${stats.discoveryTotal}`, "elements discovered"],
-    [`${stats.transmutations}`, "transmutations"],
-    [formatElapsed(stats.elapsedSeconds), "time in the lab"],
+  const cols = [
+    [`${stats.discovered} / ${stats.total}`, "elements discovered"],
+    [`${stats.badgeCount} / ${stats.badgeTotal}`, "category badges"],
   ] as const;
 
-  const colWidth = width / 3;
-  stats3.forEach(([value, label], i) => {
+  const colWidth = width / 2;
+  cols.forEach(([value, label], i) => {
     const cx = colWidth * i + colWidth / 2;
     ctx.fillStyle = "#E8A94B";
-    ctx.font = "500 40px Georgia, serif";
+    ctx.font = "500 46px Georgia, serif";
     ctx.fillText(value, cx, 460);
     ctx.fillStyle = "#8A8A94";
     ctx.font = "16px Georgia, serif";
-    ctx.fillText(label, cx, 492);
+    ctx.fillText(label, cx, 494);
   });
 
   ctx.strokeStyle = "rgba(230,200,136,0.25)";
   ctx.beginPath();
-  ctx.moveTo(width / 3, 420);
-  ctx.lineTo(width / 3, 500);
-  ctx.moveTo((width / 3) * 2, 420);
-  ctx.lineTo((width / 3) * 2, 500);
+  ctx.moveTo(width / 2, 420);
+  ctx.lineTo(width / 2, 500);
   ctx.stroke();
 
   return new Promise((resolve, reject) => {

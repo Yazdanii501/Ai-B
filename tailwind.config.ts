@@ -24,6 +24,15 @@ export default {
       boxShadow: {
         none: "none",
       },
+      keyframes: {
+        "glow-pulse": {
+          "0%, 100%": { opacity: "0.32", transform: "translate(-50%, -50%) scale(1)" },
+          "50%": { opacity: "0.46", transform: "translate(-50%, -50%) scale(1.06)" },
+        },
+      },
+      animation: {
+        "glow-pulse": "glow-pulse 9s ease-in-out infinite",
+      },
       backdropBlur: {
         glass: "20px",
       },

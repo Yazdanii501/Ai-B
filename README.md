@@ -1,8 +1,8 @@
-# The Alchemist
+# Elementa
 
-A cinematic, interactive 3D web experience. Drag reagents into a glass vessel on a
-dark, candle-lit table to discover new elements, tier by tier, until you turn lead
-into gold — then keep experimenting in a free-play sandbox.
+A living periodic table. Tap any of the 118 glass element tiles to meet its
+holographic atom, read what it's known for, and answer a short question to add
+it to your collection. Collect every element in a category to earn its badge.
 
 Built with Vite, React, TypeScript, react-three-fiber (three.js), drei,
 `@react-three/postprocessing`, framer-motion, gsap, zustand, howler and Tailwind.
